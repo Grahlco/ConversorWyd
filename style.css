@@ -1,0 +1,57 @@
+/* Background with WYD image */
+body {
+  font-family: Arial, sans-serif;
+  background-image: url('./img/img-wyd.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 100vh;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Centered container with semi-transparent white background */
+.container {
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 30px;
+  border-radius: 15px;
+  max-width: 400px;
+  width: 100%;
+  box-shadow: 0 0 20px rgba(0,0,0,0.3);
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+input, select, button {
+  margin-top: 10px;
+  display: block;
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+#result {
+  margin-top: 20px;
+  font-weight: bold;
+  text-align: center;
+  font-size: 18px;
+}
