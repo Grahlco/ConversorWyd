@@ -1,26 +1,47 @@
 "use strict";
-const VALUE_BILLION_BRL = 25; // 1 billion = 25 BRL
-const VALUE_BILLION_KK = 1100; // 1 billion = 1100 kk
-const VALUE_PER_KK = VALUE_BILLION_BRL / VALUE_BILLION_KK; // ~0.022727
-const KK_PER_BRL = VALUE_BILLION_KK / VALUE_BILLION_BRL; // ~44 kk per BRL
+const VALUE_BILLION_BRL = 25; // 1 bi = R$25
+const VALUE_BILLION_KK = 1100; // 1 bi = 1100 kk
+const VALUE_PER_KK = VALUE_BILLION_BRL / VALUE_BILLION_KK;
+const KK_PER_BRL = VALUE_BILLION_KK / VALUE_BILLION_BRL;
 function brlToKK(amountBRL) {
     return amountBRL * KK_PER_BRL;
 }
 function kkToBRL(amountKK) {
     return amountKK * VALUE_PER_KK;
 }
+// Nova função para interpretar valores com 'bi', 'kkk', 'kk'
+function parseCustomKKInput(input) {
+    const normalized = input.trim().toLowerCase();
+    const biMatch = normalized.match(/^(\d+(?:[\.,]?\d*)?)\s*bi$/);
+    const kkkMatch = normalized.match(/^(\d+(?:[\.,]?\d*)?)\s*kkk$/);
+    const kkMatch = normalized.match(/^(\d+(?:[\.,]?\d*)?)\s*kk$/);
+    const plainNumber = normalized.match(/^(\d+(?:[\.,]?\d*)?)$/);
+    const parse = (val) => parseFloat(val.replace(',', '.'));
+    if (biMatch)
+        return parse(biMatch[1]) * VALUE_BILLION_KK;
+    if (kkkMatch)
+        return parse(kkkMatch[1]) * 1000;
+    if (kkMatch)
+        return parse(kkMatch[1]);
+    if (plainNumber)
+        return parse(plainNumber[1]);
+    return NaN;
+}
 function convert() {
     const amountInput = document.getElementById("amount");
     const conversionType = document.getElementById("conversionType").value;
     const resultDiv = document.getElementById("result");
-    const amount = parseFloat(amountInput.value);
+    const rawInput = amountInput.value;
+    const amount = conversionType === "kk-to-brl"
+        ? parseCustomKKInput(rawInput)
+        : parseFloat(rawInput.replace(',', '.'));
     if (isNaN(amount) || amount <= 0) {
         resultDiv.style.color = "crimson";
         resultDiv.innerText = "Please enter a valid amount.";
         resultDiv.style.opacity = "1";
         return;
     }
-    resultDiv.style.color = "#222"; // reset color
+    resultDiv.style.color = "#222";
     if (conversionType === "brl-to-kk") {
         const kk = brlToKK(amount);
         const billions = Math.floor(kk / VALUE_BILLION_KK);
@@ -37,10 +58,10 @@ function convert() {
             answer += `${billions} bi`;
             if (roundedRemainderKK > 0) {
                 if (roundedRemainderKK >= 1000) {
-                    answer += ` and ${roundedRemainderKK} kkk`;
+                    answer += ` e ${roundedRemainderKK} kkk`;
                 }
                 else {
-                    answer += ` and ${roundedRemainderKK} kk`;
+                    answer += ` e ${roundedRemainderKK} kk`;
                 }
             }
         }
@@ -56,7 +77,7 @@ function convert() {
     }
     else {
         const brl = kkToBRL(amount);
-        resultDiv.innerText = `${amount.toFixed(0)} kk é aproximadamente BRL ${brl.toFixed(2).replace('.', ',')}`;
+        resultDiv.innerText = `${rawInput} é aproximadamente BRL ${brl.toFixed(2).replace('.', ',')}`;
     }
     resultDiv.style.opacity = "1";
 }
