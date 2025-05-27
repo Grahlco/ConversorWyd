@@ -55,3 +55,11 @@ button:hover {
   text-align: center;
   font-size: 18px;
 }
+
+.notranslate {
+  translate: no !important;
+  -webkit-user-select: text !important;
+  user-select: text !important;
+  unicode-bidi: isolate !important;
+  direction: ltr !important;
+}
